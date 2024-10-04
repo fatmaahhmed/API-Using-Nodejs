@@ -1,0 +1,96 @@
+-- database: ../../mainApp/prisma/INTERN-database.db
+
+SELECT * FROM category;
+-- delete 
+-- delete 
+DELETE FROM category;
+--insert
+INSERT INTO category (category_id,user_id,category_name, parent_id) VALUES
+(1,2,'Electronics', NULL),
+(2,2,'Smartphones', 1),
+(3,2,'Laptops', 1),
+(4,2,'Tablets', 1),
+(5,2,'iPhone', 2),
+(6,2,'Samsung', 2),
+(7,2,'Google Pixel', 2),
+(8,2,'MacBooks', 3),
+(9,2,'Dell', 3),
+(10,3,'HP', 3),
+(11,3,'iPad', 4),
+(12,3,'Samsung Galaxy Tab', 4),
+(13,3,'Microsoft Surface', 4);
+
+
+-- Create the Categories table
+CREATE TABLE Categories (
+    CategoryID INT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    ParentCategoryID INT,
+    FOREIGN KEY (ParentCategoryID) REFERENCES Categories(CategoryID)
+);
+
+-- Insert top-level categories
+INSERT INTO Categories (CategoryID, Name, ParentCategoryID) VALUES
+(1, 'Electronics', NULL),
+(2, 'Clothing', NULL),
+(3, 'Books', NULL);
+
+-- Insert subcategories for Electronics
+INSERT INTO Categories (CategoryID, Name, ParentCategoryID) VALUES
+(4, 'Computers', 1),
+(5, 'Smartphones', 1),
+(6, 'TVs', 1);
+
+-- Insert subcategories for Computers
+INSERT INTO Categories (CategoryID, Name, ParentCategoryID) VALUES
+(7, 'Laptops', 4),
+(8, 'Desktops', 4),
+(9, 'Tablets', 4),
+(10, 'Accessories', 4);
+
+-- Insert subcategories for Smartphones
+INSERT INTO Categories (CategoryID, Name, ParentCategoryID) VALUES
+(11, 'Android', 5),
+(12, 'iOS', 5),
+(13, 'Other OS', 5),
+(14, 'Phone Cases', 5);
+
+-- Continue this pattern for other categories and subcategories...
+
+-- Recursive query to display the category hierarchy
+WITH RECURSIVE CategoryHierarchy AS (
+    -- Base case: Select all top-level categories
+    SELECT 
+        category_id AS CategoryID, 
+        Name, 
+        ParentCategoryID, 
+        0 AS Level, 
+        CAST(Name AS VARCHAR(1000)) AS Path
+    FROM 
+        category
+    WHERE 
+        parent_id IS NULL
+
+    UNION ALL
+
+    -- Recursive case: Select child categories and link them to parents
+    SELECT 
+        c.CategoryID, 
+        c.Name, 
+        c.parent_id, 
+        ch.Level + 1, 
+        CAST(CONCAT(ch.Path, ' > ', c.Name) AS VARCHAR(1000)) AS Path
+    FROM 
+        category c
+    JOIN 
+        CategoryHierarchy ch ON c.ParentCategoryID = ch.CategoryID
+)
+SELECT 
+    CategoryID,
+    REPLICATE('  ', Level) + Name AS Category,
+    Level,
+    Path
+FROM 
+    CategoryHierarchy
+ORDER BY 
+    Path;

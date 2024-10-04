@@ -1,0 +1,114 @@
+// https://prisma-editor.vercel.app/schema/7871
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Removed enum Role and replaced with a string field in the user model
+model user {
+  user_id     Int        @id @default(autoincrement())
+  username    String     @unique
+  name        String
+  email       String     @unique
+  password    String
+  token       String     @default("")
+  role         String    @default("User")
+  verificationCode String @default("")
+  verification_code_expires DateTime @default(now())
+  verified    Boolean    @default(false)
+  products    product[]  // A user can have multiple products
+  wishList    wishList[]
+  categories  category[] // An admin can manage multiple categories
+  // subCategories subcategory[] // An admin can manage multiple subcategories
+  reviews     review[]   // A user can have multiple reviews
+  brands      brand[]    // An admin can manage multiple brands
+
+}
+model category {
+  category_id   Int       @id @default(autoincrement()) @unique
+  category_name String    @unique
+  user_id       Int     // Foreign key to User
+  parent_id     Int?   
+  // Relations
+  Admin         user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
+  products      product[]  // A category can have multiple products
+  parentCategory category?   @relation("ParentRelation", fields: [parent_id], references: [category_id])// A category can have a parent category
+  childCategories category[] @relation("ParentRelation") // A category can have multiple subcategories
+
+}
+
+
+// model subcategory {
+//   subcategory_id     Int             @id @default(autoincrement())
+//   subcategory_name   String          @unique
+//   category_id        Int
+//   category           category        @relation(fields: [category_id], references: [category_id], onDelete: Cascade)
+//   user_id            Int             @default(1)
+//   parent_id          Int?  
+//   // Admin              user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
+//   product            product[]       // A subcategory can have multiple products         
+//   parentSubCategory  subcategory?    @relation("ParentRelation", fields: [parent_id], references: [subcategory_id])
+//   childSubCategories subcategory[]   @relation("ParentRelation")
+// }
+
+model product {
+  product_id      Int       @id @default(autoincrement())
+  product_name            String    @unique
+  description     String    // Description is now required
+  price           Float
+  quantity        Int
+  brand_id        Int
+  rating          Float
+  reviews_count   Int
+  is_best_seller  Boolean
+  is_on_sale      Boolean
+  sale_start_date DateTime
+  sale_end_date   DateTime
+  discount_price  Float
+  category_id     Int?
+  user_id         Int
+  WishList        wishList[] 
+  category        category?   @relation(fields: [category_id], references: [category_id], onDelete: Cascade, onUpdate: Cascade)//
+  user            user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  reviews         review[]  // A product can have multiple reviews
+  brand           brand     @relation(fields: [brand_id], references: [brand_id])
+}
+
+model wishList {
+  wishlist_id   Int       @id @default(autoincrement())
+  product_id    Int
+  user_id       Int
+
+  product       product   @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
+  user          user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  // i need wishlist_id,product_id and user_id to be unique
+  // Composite unique constraint
+  @@unique([wishlist_id, product_id, user_id])
+
+
+  @@index([product_id])
+  @@index([user_id])
+}
+model review {
+  review_id   Int       @id @default(autoincrement())
+  product_id  Int
+  user_id     Int
+  // rating maximum value is 5
+  rating  Float   @default(0) 
+  created_at  DateTime
+  updated_at  DateTime
+  product     product   @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
+  user        user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+}
+model brand {
+  brand_id    Int       @id @default(autoincrement())
+  brand_name  String    @unique
+  user_id     Int
+  user        user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  products    product[] // A brand can have multiple products
+}
+
