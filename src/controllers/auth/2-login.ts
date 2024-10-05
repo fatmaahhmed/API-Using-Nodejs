@@ -15,6 +15,7 @@ export const login = asyncHandler(
     }
     req.role = user.role;
     req.params.user_id = user.user_id.toString();
+    req.email = user.email;
     next();
     res.status(200).json({ message: "Login successful", token: req.token });
   }
