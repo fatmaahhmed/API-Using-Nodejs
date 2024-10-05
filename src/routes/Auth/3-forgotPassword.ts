@@ -6,7 +6,7 @@ import { validateForgotpassword } from "../../utils/Validations/Auth/validateFor
 export const forgotpasswordRouter = Router();
 forgotpasswordRouter.post(
   "/",
-  validateForgotpassword,
+  // validateForgotpassword,
   forgotpassword
   // generateAuthToken
 );
