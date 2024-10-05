@@ -4,7 +4,7 @@ import ApiError from "../../utils/err/ApiErrorHandler";
 import { ExtendedRequest } from "../../utils/Types/request/request";
 import asyncHandler from "express-async-handler";
 import { handlePrismaError } from "../../utils/err/handlePrismaerror";
-import { hashPassword } from "../../utils/hashPassword";
+import { hashPassword } from "../../utils/HassingPasswordFunction/hashPassword";
 import { prisma } from "../../prisma/config";
 
 export const signUp = asyncHandler(
@@ -27,6 +27,8 @@ export const signUp = asyncHandler(
         throw handlePrismaError(error);
       });
     req.params.user_id = user.user_id.toString();
+    req.body.role = user.role;
+    req.body.email = user.email;
     next();
     const message = `User added successfully`;
     console.log(req.token);
