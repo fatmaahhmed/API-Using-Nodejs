@@ -4,9 +4,10 @@ import { add, getMany, getOne, remove, update } from "../../services/CRUD";
 import ApiError from "../../utils/err/ApiErrorHandler";
 import asyncHandler from "express-async-handler";
 import { handlePrismaError } from "../../utils/err/handlePrismaerror";
+import { prisma } from "../../prisma/config";
 
 type ModelName = keyof typeof Prisma.ModelName;
-const prisma = new PrismaClient();
+
 const modelName: ModelName = "category";
 export const addCategory = add(modelName);
 export const updateCategory = update(modelName);
