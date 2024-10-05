@@ -5,9 +5,10 @@ import ApiError from "../../utils/err/ApiErrorHandler";
 import asyncHandler from "express-async-handler";
 import { getCategory } from "./categoryController";
 import { handlePrismaError } from "../../utils/err/handlePrismaerror";
+import { prisma } from "../../prisma/config";
 
 type ModelName = keyof typeof Prisma.ModelName;
-const prisma = new PrismaClient();
+
 const modelName: ModelName = "category";
 export const check_parent_id_existence = asyncHandler(
   async (req, res, next) => {
