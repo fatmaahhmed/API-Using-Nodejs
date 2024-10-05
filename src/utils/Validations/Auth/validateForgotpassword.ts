@@ -1,6 +1,6 @@
 // validateForgotpassword
-import { body, param, validationResult } from "express-validator";
 
+import { body } from "express-validator/lib/middlewares/validation-chain-builders";
 import { validationErrors } from "../../../middlewares/validation/validatorMiddleware";
 
 export const validateForgotpassword = [
