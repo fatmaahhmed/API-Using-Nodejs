@@ -5,11 +5,10 @@ import ApiError from "../utils/err/ApiErrorHandler";
 import { ExtendedRequest } from "../utils/Types/request/request";
 import asyncHandler from "express-async-handler";
 import { handlePrismaError } from "../utils/err/handlePrismaerror";
+import { prisma } from "../prisma/config";
 import { stringify } from "querystring";
 
-const prisma = new PrismaClient();
 type ModelName = keyof PrismaClient;
-
 interface CrudOperations {
   create: (args: any) => Promise<any>;
   findUnique: (args: any) => Promise<any>;
@@ -37,6 +36,11 @@ const createCrudHandler = (
           case "add":
             const a = req.body;
             console.log(JSON.stringify(a));
+            console.log(req.body);
+            console.log(req.params.user_id);
+            // console.log(modelName.toString());
+            // console.log(model);
+
             result = await model.create({
               data: { ...req.body, [userId]: +req.params[userId] },
             });
