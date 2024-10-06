@@ -8,8 +8,6 @@
 //   email?: string;
 // }
 
-// const prisma = new PrismaClient();
-
 // export class ProductService {
 //   private userDAO: UserImpl;
 //   constructor() {
