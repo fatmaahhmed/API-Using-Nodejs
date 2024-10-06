@@ -23,10 +23,6 @@ export const verifyCode = asyncHandler(
     await updateUser(user.user_id, {
       verified: false,
     });
-    // res.status(200).json({
-    //   message: "Code verified",
-    //   token: req.token,
-    // });
     next();
   }
 );
