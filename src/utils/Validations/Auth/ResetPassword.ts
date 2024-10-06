@@ -1,18 +1,22 @@
+// validateForgotpassword
+
 import { body } from "express-validator/lib/middlewares/validation-chain-builders";
 import { validationErrors } from "../../../middlewares/validation/validatorMiddleware";
 
-export const validateLogin = [
-  // Validate category_name
+export const validateResetPassword = [
   body("email")
     .notEmpty()
     .withMessage("Email is required")
     .isEmail()
     .withMessage("Email is invalid"),
+  body("code")
+    .notEmpty()
+    .withMessage("Code is required")
+    .isNumeric()
+    .withMessage("Code must be a number"),
   body("password")
     // .isStrongPassword()
-    // .withMessage(
-    //   `Password must be strong consisting of at least8 characters,1 lowercase letter, 1 uppercase letter, 1 number,and 1 special characterlike Admin@123`
-    // )
+    // .withMessage(`password invalid`)
     .notEmpty()
     .withMessage("Password is required"),
   validationErrors,

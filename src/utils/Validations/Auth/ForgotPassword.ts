@@ -3,7 +3,7 @@
 import { body } from "express-validator/lib/middlewares/validation-chain-builders";
 import { validationErrors } from "../../../middlewares/validation/validatorMiddleware";
 
-export const validateForgotpassword = [
+export const validateForgotPassword = [
   body("email")
     .notEmpty()
     .withMessage("Email is required")
