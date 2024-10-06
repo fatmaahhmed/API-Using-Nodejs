@@ -1,12 +1,6 @@
 import { Router } from "express";
 import { forgotpassword } from "../../controllers/auth/3-forgotPassword";
-import { generateAuthToken } from "../../middlewares/auth/generateToken";
-import { validateForgotpassword } from "../../utils/Validations/Auth/validateForgotpassword";
+import { validateForgotPassword } from "../../utils/Validations/Auth/ForgotPassword";
 
 export const forgotpasswordRouter = Router();
-forgotpasswordRouter.post(
-  "/",
-  // validateForgotpassword,
-  forgotpassword
-  // generateAuthToken
-);
+forgotpasswordRouter.post("/", validateForgotPassword, forgotpassword);

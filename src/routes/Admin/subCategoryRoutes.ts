@@ -11,34 +11,36 @@ import {
 import {
   validateDeleteSubCategory,
   validateSubCategory,
+  validateUpdateSubCategory,
 } from "../../utils/Validations/AdminValidation/Admin.SubCategory";
 
-import { check } from "express-validator";
+// import { check } from "express-validator";
 //  import { SubSubCategory } from "./Admin.SubSubCategory";
 import express from "express";
 import { verifyTokenWithOptionalRole } from "../../middlewares/auth/verifyTokenWithOptionalRole";
 
 const SubCategoryRoute = express.Router();
-// SubCategory.use("/:SubCategory_id/sub/", SubSubCategory);
+// SubCategory.use("/:category_id/sub/", SubSubCategory);
 
-SubCategoryRoute.get("/:subcategory_id", getSubCategory);
+SubCategoryRoute.get("/:category_id", getSubCategory);
 SubCategoryRoute.get("/", getPaginatedCategories);
-SubCategoryRoute.get("/:SubCategory_id", getSubCategory);
+SubCategoryRoute.get("/:category_id", getSubCategory);
 SubCategoryRoute.post(
   "/",
   verifyTokenWithOptionalRole("Admin"),
   validateSubCategory,
+
   check_parent_id_existence,
   addSubCategory
 );
-SubCategoryRoute.route("/:SubCategory_id")
+SubCategoryRoute.route("/:category_id")
   .delete(
     verifyTokenWithOptionalRole("Admin"),
     validateDeleteSubCategory,
     deleteSubCategory
   )
   .put(
-    // validateSubCategoryUpdate,
+    validateUpdateSubCategory,
     verifyTokenWithOptionalRole("Admin"),
     updateSubCategory
   );

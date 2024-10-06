@@ -3,6 +3,7 @@ import {
   deleteCategory,
   getCategory,
   getPaginatedCategories,
+  getPaginatedCategoriesWithSubCategories,
   updateCategory,
 } from "../../controllers/admin/categoryController";
 import {
@@ -17,26 +18,29 @@ import express from "express";
 import { verifyTokenWithOptionalRole } from "../../middlewares/auth/verifyTokenWithOptionalRole";
 
 const Category = express.Router();
-Category.use("/:category_id/subCategory/", getCategory);
+// Category.use("/:category_id/subCategory/", getCategory);
 
-Category.get("/:category_id/subCategory");
+Category.get(
+  "/:category_id/subCategory",
+  getPaginatedCategoriesWithSubCategories
+);
 Category.get("/", getPaginatedCategories);
 Category.get("/:category_id", getCategory);
 Category.post(
   "/",
-  validateCategory,
   verifyTokenWithOptionalRole("Admin"),
+  validateCategory,
   addCategory
 );
 Category.route("/:category_id")
   .delete(
-    validateDeleteCategory,
     verifyTokenWithOptionalRole("Admin"),
+    validateDeleteCategory,
     deleteCategory
   )
   .put(
-    validateCategoryUpdate,
     verifyTokenWithOptionalRole("Admin"),
+    validateCategoryUpdate,
     updateCategory
   );
 
