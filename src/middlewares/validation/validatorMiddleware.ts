@@ -1,7 +1,7 @@
-// Middleware to check validation results
-
 import { NextFunction, Request, Response } from "express";
-import { body, param, validationResult } from "express-validator";
+
+import asyncHandler from "express-async-handler";
+import { validationResult } from "express-validator";
 
 export const validationErrors = (
   req: Request,
@@ -10,7 +10,8 @@ export const validationErrors = (
 ) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    res.status(400).json({ errors: errors.array() });
+    return;
   }
   next();
 };

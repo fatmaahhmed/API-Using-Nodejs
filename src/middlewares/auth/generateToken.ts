@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 
-import { ExtendedRequest } from "../../utils/Interfaces";
+import { ExtendedRequest } from "../../utils/Types/request/request";
 import jwt from "jsonwebtoken";
 
 require("dotenv").config();
 export type JwtPayload = {
   role: string | "user";
   email: string;
-  userId: number;
+  user_id: number;
 };
 
 export const generateAuthToken = async (
@@ -19,13 +19,12 @@ export const generateAuthToken = async (
   if (!privateKey) {
     throw new Error("Private key is not defined in environment variables.");
   }
-
   const payload: JwtPayload = {
-    role: req.body.role,
-    email: req.body.email,
-    userId: +req.params.user_id,
+    role: req.role || "user",
+    email: req.email || "",
+    user_id: +req.params.user_id,
   };
   console.log(`payload: ${JSON.stringify(payload)}`);
-  const token = jwt.sign(payload, privateKey, { expiresIn: "5" });
+  const token = jwt.sign(payload, privateKey, { expiresIn: "5h" });
   req.token = token;
 };
