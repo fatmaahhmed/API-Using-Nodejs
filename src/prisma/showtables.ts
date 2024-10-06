@@ -1,3 +1,4 @@
+import { getOne } from "./../services/CRUD";
 import { prisma } from "./config";
 
 export async function showTables() {

@@ -1,9 +1,8 @@
 import ApiError from "../utils/err/ApiErrorHandler";
 import { PrismaClient } from "@prisma/client";
 import { handlePrismaError } from "../utils/err/handlePrismaerror";
-import { hashPassword } from "../utils/hashPassword";
-
-const prisma = new PrismaClient();
+import { hashPassword } from "../utils/HassingPasswordFunction/hashPassword";
+import { prisma } from "../prisma/config";
 
 function generateRandomString(length: number): string {
   return Math.random()
