@@ -1,12 +1,17 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
-
 model user {
   user_id                   Int        @id @default(autoincrement())
   username                  String     @unique
@@ -29,7 +34,7 @@ model user {
 model category {
   category_id     Int        @id @unique @default(autoincrement())
   category_name   String     @unique
-  slug            String     @unique
+  slug            String    @default("")
   user_id         Int
   parent_id       Int?
   parentCategory  category?  @relation("ParentRelation", fields: [parent_id], references: [category_id])
@@ -41,7 +46,7 @@ model category {
 model product {
   product_id      Int        @id @default(autoincrement())
   product_name    String     @unique
-  slug            String     @unique
+  slug            String    @default("")
   quantity        Int
   description     String
   price           Float
@@ -100,9 +105,10 @@ model review {
 
 model brand {
   brand_id   Int       @id @default(autoincrement())
-  brand_name String    @unique
+  brand_name String    @default("")
   slug       String    @unique
   user_id    Int
   user       user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   products   product[]
 }
+
