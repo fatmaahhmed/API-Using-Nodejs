@@ -1,19 +1,26 @@
-import { Product } from "../../utils/Types/request/types";
+import // validateDeleteProduct,
+// validateProduct,
+// validateUpdateProduct,
+"../../utils/Validations/AdminValidation/Admin.Product";
+
 import {
   deleteProduct,
   getPaginatedProducts,
+  getProduct,
 } from "../../controllers/admin/productController";
 
-import bodyParser from "body-parser";
 import express from "express";
-import { verify } from "jsonwebtoken";
 import { verifyTokenWithOptionalRole } from "../../middlewares/auth/verifyTokenWithOptionalRole";
 
-const Product = express.Router();
+const ProductRoute = express.Router();
 
-Product.use(bodyParser.json());
-Product.use(verifyTokenWithOptionalRole("Admin"));
-Product.get("/", getPaginatedProducts);
-Product.delete("/:product_id", deleteProduct);
+ProductRoute.get("/:product_id", getProduct);
+verifyTokenWithOptionalRole("Admin"),
+  ProductRoute.get("/", getPaginatedProducts);
+ProductRoute.route("/:product_id").delete(
+  verifyTokenWithOptionalRole("Admin"),
+  // validateDeleteProduct,
+  deleteProduct
+);
 
-export default Product;
+export default ProductRoute;
