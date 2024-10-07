@@ -1,0 +1,41 @@
+➜  API-Using-Nodejs git:(master) ✗ struct
+├── .env
+├── .gitignore
+├── .vscode
+│  └── settings.json
+├── package-lock.json
+├── package.json
+├── src
+│  ├── controllers
+│  │  ├── admin
+│  │  ├── auth
+│  │  └── user
+│  ├── middlewares
+│  │  ├── auth   
+│  ├── prisma
+│  │  ├── config
+│  │  │  ├── database.ts
+│  │  │  └── prismaConfig.ts
+│  │  ├── DB
+│  │  │  ├── cleanUp.ts
+│  │  │  ├── seed.ts
+│  │  │  └── showtables.ts
+│  │  ├── schema.prisma
+│  │  └── sqlite.db
+│  ├── routes
+│  │  ├── Admin
+│  │  ├── Auths
+│  │  ├── MainRoutes
+│  │  └── User
+│  ├── server.ts
+│  ├── services
+│  │  ├── CRUD.ts
+│  │  └── UserAndAdmin.ts
+│  ├── sqlConnection
+│  │  └── config.ts
+│  └── utils
+│    ├── err
+│    ├── HassingPasswordFunction
+│    ├── Types
+│    └── Validations
+└── tsconfig.json
