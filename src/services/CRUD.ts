@@ -5,7 +5,7 @@ import ApiError from "../utils/err/ApiErrorHandler";
 import { ExtendedRequest } from "../utils/Types/request/request";
 import asyncHandler from "express-async-handler";
 import { handlePrismaError } from "../utils/err/handlePrismaerror";
-import { prisma } from "../prisma/config";
+import { prisma } from "../prisma/config/prismaConfig";
 import { stringify } from "querystring";
 
 type ModelName = keyof PrismaClient;

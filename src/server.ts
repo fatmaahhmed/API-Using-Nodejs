@@ -2,24 +2,24 @@ import express, { Request, Response } from "express";
 
 import { applyMiddlewares } from "./middlewares/routes/server";
 import { applyRoutes } from "./routes/MainRoutes/server";
-import { databaseconfig } from "./DB/config";
 import dotenv from "dotenv";
-import { prisma } from "./prisma/config";
+import { prisma } from "./prisma/config/prismaConfig";
+import { testConnection } from "./prisma/testConnection";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 // Define the async function
 async function initializeServer() {
   try {
-    await databaseconfig();
+    await testConnection();
     // Apply middlewares and routes
     applyMiddlewares(app);
     // Apply routes
     applyRoutes(app);
     // Start the server
-    app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
     });
   } catch (error) {
     console.error(error);
