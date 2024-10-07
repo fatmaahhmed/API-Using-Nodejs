@@ -1,4 +1,3 @@
-// https://prisma-editor.vercel.app/schema/7871
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,44 +7,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Removed enum Role and replaced with a string field in the user model
 model user {
-  user_id     Int        @id @default(autoincrement())
-  username    String     @unique
-  name        String
-  email       String     @unique
-  password    String
-  token       String     @default("")
-  role         String    @default("User")
-  verificationCode String @default("")
-  verification_code_expires DateTime @default(now())
-  verified    Boolean    @default(false)
-  products    product[]  // A user can have multiple products
-  wishList    wishList[]
-  categories  category[] // An admin can manage multiple categories
-  // subCategories subcategory[] // An admin can manage multiple subcategories
-  reviews     review[]   // A user can have multiple reviews
-  brands      brand[]    // An admin can manage multiple brands
-  orders      order[]    // A user can have multiple orders
-
+  user_id                   Int        @id @default(autoincrement())
+  username                  String     @unique
+  name                      String
+  email                     String     @unique
+  password                  String
+  token                     String     @default("")
+  role                      String     @default("User")
+  verificationCode          String     @default("")
+  verification_code_expires DateTime   @default(now())
+  verified                  Boolean    @default(false)
+  brands                    brand[]
+  categories                category[]
+  orders                    order[]
+  products                  product[]
+  reviews                   review[]
+  wishList                  wishList[]
 }
+
 model category {
-  category_id   Int       @id @default(autoincrement()) @unique
-  category_name String    @unique
-  user_id       Int     // Foreign key to User
-  parent_id     Int?   
-  // Relations
-  Admin         user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
-  products      product[]  // A category can have multiple products
-  parentCategory category?   @relation("ParentRelation", fields: [parent_id], references: [category_id])// A category can have a parent category
-  childCategories category[] @relation("ParentRelation") // A category can have multiple subcategories
-
+  category_id     Int        @id @unique @default(autoincrement())
+  category_name   String     @unique
+  slug            String     @unique
+  user_id         Int
+  parent_id       Int?
+  parentCategory  category?  @relation("ParentRelation", fields: [parent_id], references: [category_id])
+  childCategories category[] @relation("ParentRelation")
+  Admin           user       @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  products        product[]
 }
+
 model product {
-  product_id      Int       @id @default(autoincrement())
-  product_name            String    @unique
+  product_id      Int        @id @default(autoincrement())
+  product_name    String     @unique
+  slug            String     @unique
   quantity        Int
-  description     String    // Description is now required
+  description     String
   price           Float
   brand_id        Int
   rating          Float
@@ -57,53 +55,54 @@ model product {
   discount_price  Float
   category_id     Int?
   user_id         Int
-  WishList        wishList[] 
-  category        category?   @relation(fields: [category_id], references: [category_id], onDelete: Cascade, onUpdate: Cascade)//
-  user            user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
-  reviews         review[]  // A product can have multiple reviews
-  brand           brand     @relation(fields: [brand_id], references: [brand_id])
-  orders          order[]   // A product can be ordered multiple times
+  orders          order[]
+  brand           brand      @relation(fields: [brand_id], references: [brand_id])
+  user            user       @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  category        category?  @relation(fields: [category_id], references: [category_id], onDelete: Cascade)
+  reviews         review[]
+  WishList        wishList[]
 }
+
 model order {
-  order_id    Int       @id @default(autoincrement())
-  user_id     Int
-  product_id  Int
-  quantity    Int
+  order_id        Int      @id @default(autoincrement())
+  user_id         Int
+  product_id      Int
+  quantity        Int
   time_to_deliver DateTime
-  total_price Float
-  order_date  DateTime
-  user        user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)// A user can have multiple orders
-  product     product   @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
+  total_price     Float
+  order_date      DateTime
+  product         product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
+  user            user     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 }
 
 model wishList {
-  wishlist_id   Int       @id @default(autoincrement())
-  product_id    Int
-  user_id       Int
+  wishlist_id Int     @id @default(autoincrement())
+  product_id  Int
+  user_id     Int
+  user        user    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  product     product @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
 
-  product       product   @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
-  user          user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   @@unique([wishlist_id, product_id, user_id])
-
   @@index([product_id])
   @@index([user_id])
 }
+
 model review {
-  review_id   Int       @id @default(autoincrement())
-  product_id  Int
-  user_id     Int
-  // rating maximum value is 5
-  rating  Float   @default(0) 
-  created_at  DateTime
-  updated_at  DateTime
-  product     product   @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
-  user        user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
-}
-model brand {
-  brand_id    Int       @id @default(autoincrement())
-  brand_name  String    @unique
-  user_id     Int
-  user        user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
-  products    product[] // A brand can have multiple products
+  review_id  Int      @id @default(autoincrement())
+  product_id Int
+  user_id    Int
+  rating     Float    @default(0)
+  created_at DateTime
+  updated_at DateTime
+  user       user     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  product    product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
 }
 
+model brand {
+  brand_id   Int       @id @default(autoincrement())
+  brand_name String    @unique
+  slug       String    @unique
+  user_id    Int
+  user       user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  products   product[]
+}
