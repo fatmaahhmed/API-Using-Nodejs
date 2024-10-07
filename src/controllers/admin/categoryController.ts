@@ -4,7 +4,7 @@ import { add, getMany, getOne, remove, update } from "../../services/CRUD";
 import ApiError from "../../utils/err/ApiErrorHandler";
 import asyncHandler from "express-async-handler";
 import { handlePrismaError } from "../../utils/err/handlePrismaerror";
-import { prisma } from "../../prisma/config";
+import { prisma } from "../../prisma/config/prismaConfig";
 
 type ModelName = keyof typeof Prisma.ModelName;
 

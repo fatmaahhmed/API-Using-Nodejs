@@ -4,7 +4,7 @@ import { findUserByEmail, updateUser } from "../../services/UserAndAdmin";
 import { ExtendedRequest } from "../../utils/Types/request/request";
 import asyncHandler from "express-async-handler";
 import { hashPassword } from "../../utils/HassingPasswordFunction/hashPassword";
-import { prisma } from "../../prisma/config";
+import { prisma } from "../../prisma/config/prismaConfig";
 import { user } from "@prisma/client";
 
 export const resetPassword = asyncHandler(

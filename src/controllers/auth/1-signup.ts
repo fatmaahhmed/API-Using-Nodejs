@@ -5,7 +5,7 @@ import { ExtendedRequest } from "../../utils/Types/request/request";
 import asyncHandler from "express-async-handler";
 import { handlePrismaError } from "../../utils/err/handlePrismaerror";
 import { hashPassword } from "../../utils/HassingPasswordFunction/hashPassword";
-import { prisma } from "../../prisma/config";
+import { prisma } from "../../prisma/config/prismaConfig";
 
 export const signUp = asyncHandler(
   async (req: ExtendedRequest, res: Response, next: NextFunction) => {
