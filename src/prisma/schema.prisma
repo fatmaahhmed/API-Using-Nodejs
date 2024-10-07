@@ -26,6 +26,7 @@ model user {
   // subCategories subcategory[] // An admin can manage multiple subcategories
   reviews     review[]   // A user can have multiple reviews
   brands      brand[]    // An admin can manage multiple brands
+  orders      order[]    // A user can have multiple orders
 
 }
 model category {
@@ -40,27 +41,12 @@ model category {
   childCategories category[] @relation("ParentRelation") // A category can have multiple subcategories
 
 }
-
-
-// model subcategory {
-//   subcategory_id     Int             @id @default(autoincrement())
-//   subcategory_name   String          @unique
-//   category_id        Int
-//   category           category        @relation(fields: [category_id], references: [category_id], onDelete: Cascade)
-//   user_id            Int             @default(1)
-//   parent_id          Int?  
-//   // Admin              user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
-//   product            product[]       // A subcategory can have multiple products         
-//   parentSubCategory  subcategory?    @relation("ParentRelation", fields: [parent_id], references: [subcategory_id])
-//   childSubCategories subcategory[]   @relation("ParentRelation")
-// }
-
 model product {
   product_id      Int       @id @default(autoincrement())
   product_name            String    @unique
+  quantity        Int
   description     String    // Description is now required
   price           Float
-  quantity        Int
   brand_id        Int
   rating          Float
   reviews_count   Int
@@ -76,6 +62,18 @@ model product {
   user            user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   reviews         review[]  // A product can have multiple reviews
   brand           brand     @relation(fields: [brand_id], references: [brand_id])
+  orders          order[]   // A product can be ordered multiple times
+}
+model order {
+  order_id    Int       @id @default(autoincrement())
+  user_id     Int
+  product_id  Int
+  quantity    Int
+  time_to_deliver DateTime
+  total_price Float
+  order_date  DateTime
+  user        user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)// A user can have multiple orders
+  product     product   @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
 }
 
 model wishList {
@@ -85,10 +83,7 @@ model wishList {
 
   product       product   @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
   user          user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
-  // i need wishlist_id,product_id and user_id to be unique
-  // Composite unique constraint
   @@unique([wishlist_id, product_id, user_id])
-
 
   @@index([product_id])
   @@index([user_id])
