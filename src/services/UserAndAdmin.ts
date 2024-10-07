@@ -3,7 +3,7 @@ import { NextFunction, Response } from "express";
 import ApiError from "../utils/err/ApiErrorHandler";
 import { PrismaClient } from "@prisma/client";
 import { handlePrismaError } from "../utils/err/handlePrismaerror";
-import { prisma } from "../prisma/config";
+import { prisma } from "../prisma/config/prismaConfig";
 
 type ModelName = keyof PrismaClient;
 export const findUserByEmail = async (email: string) => {
