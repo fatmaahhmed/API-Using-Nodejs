@@ -1,0 +1,22 @@
+
+INSERT INTO brand (brand_id, brand_name, user_id) VALUES
+(1, 'TechPro', 1),
+(2, 'FashionForward', 1),
+(3, 'BookWorm', 1),
+(4, 'ElectroMax', 1),
+(5, 'SmartGear', 1),
+(6, 'ScreenMaster', 1),
+(7, 'ComputeKing', 1),
+(8, 'MobileMagic', 1),
+(9, 'SummerStyle', 1),
+(10, 'WinterWonder', 1),
+(11, 'LiteraryLights', 1),
+(12, 'KidReadz', 1),
+(13, 'TechAccessories', 1),
+(14, 'PhoneShield', 1),
+(15, 'AppleGear', 1),
+(16, 'AndroidWorld', 1),
+(17, 'DellTech', 3),
+(18, 'HPInnovate', 3),
+(19, 'LenovoSmart', 3),
+(20, 'AcerEdge', 3);
