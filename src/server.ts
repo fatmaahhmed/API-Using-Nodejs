@@ -5,6 +5,7 @@ import { applyRoutes } from "./routes/MainRoutes/server";
 import dotenv from "dotenv";
 import { prisma } from "./prisma/config/prismaConfig";
 import { testConnection } from "./prisma/testConnection";
+import { testDB } from "./prisma/testDB";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
