@@ -1,30 +1,43 @@
-// import { Router } from "express";
-// import { isAdmin } from "../../middlewares/IsAdmin";
-// import { isUser } from "../../middlewares/IsUser";
-// import jwtMiddleware from "../../middlewares/authMiddleware";
-// // import { productService } from "../../controllers/UserServices/User.Products";
-// import { requestLoggerMiddleware } from "../../middlewares/loggerMiddleware";
+import {
+  addProduct,
+  deleteProduct,
+  getPaginatedProducts,
+  getProduct,
+  updateProduct,
+} from "../../controllers/admin/productController";
+import {
+  validateDeleteproduct,
+  validateproduct,
+  validateproductUpdate,
+} from "../../utils/Validations/AdminValidation/Admin.Product";
 
-// const UserProduct = Router();
-// UserProduct.use(requestLoggerMiddleware);
-// //todo: Apply JWT middleware to all subsequent routes
-// UserProduct.use(jwtMiddleware);
-// UserProduct.use(isUser);
+//  import { SubProduct } from "./User.SubProduct";
+import express from "express";
+import { verifyTokenWithOptionalRole } from "../../middlewares/auth/verifyTokenWithOptionalRole";
 
-// // Product routes for users
-// UserProduct.post("/:user_id/addProducts", (req, res) =>
-//   productService.addProduct(req, res)
-// );
-// UserProduct.put("/:userId/updateproducts/:productId", (req, res) =>
-//   productService.updateProduct(req, res)
-// );
+const Product = express.Router();
+// create a new product
+Product.post(
+  "/",
+  verifyTokenWithOptionalRole("User"),
+  validateproduct,
+  addProduct
+);
+// update a product and delete a product
+Product.route("/:Product_id")
+  .delete(
+    verifyTokenWithOptionalRole("User"),
+    validateDeleteproduct,
+    deleteProduct
+  )
+  .put(
+    verifyTokenWithOptionalRole("User"),
+    validateproductUpdate,
+    updateProduct
+  );
+// get all products
+Product.get("/", getPaginatedProducts);
+// get a single product
+Product.get("/:Product_id", getProduct);
 
-// UserProduct.get("/products", (req, res) =>
-//   productService.getPaginatedProducts(req, res)
-// );
-
-// UserProduct.delete("/:userId/deleteproducts/:productId", (req, res) =>
-//   productService.deleteProduct(req, res)
-// );
-
-// export default UserProduct;
+export default Product;

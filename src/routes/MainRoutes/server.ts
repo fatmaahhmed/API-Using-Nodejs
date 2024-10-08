@@ -27,15 +27,15 @@ const applyAuthRoutes = (app: express.Application) => {
 // Function to apply admin routes
 const applyAdminRoutes = (app: express.Application) => {
   app.use(`${ADMIN_BASE_PATH}/category`, Category);
-  // app.use(`${ADMIN_BASE_PATH}/SubCategory`, SubCategory);
+  app.use(`${ADMIN_BASE_PATH}/SubCategory`, SubCategory);
   app.use(`${ADMIN_BASE_PATH}/product`, Product);
   app.use(`${ADMIN_BASE_PATH}/brand`, brand);
   app.use(`${ADMIN_BASE_PATH}/user`, user);
 };
 // Function to apply user routes
 const applyUserRoutes = (app: express.Application) => {
-  // app.use(verifyTokenWithOptionalRole("User"));
-  // app.use(`${USER_BASE_PATH}/product`, authMiddleware, isUser, UserProduct);
+  app.use(verifyTokenWithOptionalRole("User"));
+  app.use(`${USER_BASE_PATH}/product`, Product);
   // app.use(`${USER_BASE_PATH}/wishlist`, authMiddleware, isUser, WishList);
 };
 
