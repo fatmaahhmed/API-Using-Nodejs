@@ -13,10 +13,10 @@ async function verifyToken(
 }
 
 // Properly typed middleware
-export const verifyTokenWithOptionalRole = (role?: string) => {
+export const isAuthenticated = (role?: string) => {
   return async (req: Request, res: Response, next: NextFunction) => {
+    console.log("role-->", role);
     const token = req.headers.authorization?.split(" ")[1];
-
     if (!token) {
       res.status(401).json({ message: "Unauthorized: No token provided" });
       return;
