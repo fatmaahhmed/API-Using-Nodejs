@@ -27,3 +27,18 @@ export const updateUser = async (userId: number, data: any) => {
     });
   return user;
 };
+// check if user has products or not
+export const checkUserHasProducts = async (userId: number) => {
+  const user = await prisma.user
+    .findUnique({
+      where: { user_id: userId },
+      include: { products: true },
+    })
+
+    .catch((err) => {
+      handlePrismaError(err);
+    });
+  console.log("user-->", user);
+
+  return user?.products.length;
+};

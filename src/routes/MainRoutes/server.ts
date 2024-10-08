@@ -3,14 +3,16 @@ import Category from "../Admin/categoryRoutes";
 import Product from "../Admin/productRoutes";
 import SubCategory from "../Admin/subCategoryRoutes";
 import brand from "../Admin/brand";
+import { cart } from "../App/cart";
+import copon from "../App/copon";
 import express from "express";
 import { forgotpasswordRouter } from "../Auth/3-forgotPassword";
 import { globalError } from "../../middlewares/Err/GlobalErrorHandlerMiddleware";
+import { isAuthenticated } from "../../middlewares/auth/verifyTokenWithOptionalRole";
 import { loginRouter } from "./../Auth/2-login";
 import { resetPasswordRouter } from "../Auth/6-resetPassword";
 import { signupRouter } from "../Auth/1-signup";
 import user from "../Admin/userRoutes";
-import { verifyTokenWithOptionalRole } from "../../middlewares/auth/verifyTokenWithOptionalRole";
 
 // Define route paths as constants
 const AUTH_BASE_PATH = "/auth";
@@ -34,9 +36,14 @@ const applyAdminRoutes = (app: express.Application) => {
 };
 // Function to apply user routes
 const applyUserRoutes = (app: express.Application) => {
-  app.use(verifyTokenWithOptionalRole("User"));
   app.use(`${USER_BASE_PATH}/product`, Product);
   // app.use(`${USER_BASE_PATH}/wishlist`, authMiddleware, isUser, WishList);
+};
+// Function to apply routes
+const applyApiRoute = (app: express.Application) => {
+  // copon routes
+  app.use(`/api/copon`, copon);
+  app.use(`/api/cart`, cart);
 };
 
 export const applyRoutes = (app: express.Application) => {
@@ -45,12 +52,13 @@ export const applyRoutes = (app: express.Application) => {
   });
   // Apply auth routes
   applyAuthRoutes(app);
-
   // Apply admin routes
   applyAdminRoutes(app);
-
   // Apply user routes
   applyUserRoutes(app);
+  // Apply copon routes
+  applyApiRoute(app);
+  // applyRoutes(app);
 
   app.all("*", (req, res, next) => {
     const message = `Resource not found : ${req.originalUrl}`;
