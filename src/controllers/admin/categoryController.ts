@@ -2,6 +2,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { add, getMany, getOne, remove, update } from "../../services/CRUD";
 
 import ApiError from "../../utils/err/ApiErrorHandler";
+import { addSlugAttribute } from "../../middlewares/slug";
 import asyncHandler from "express-async-handler";
 import { handlePrismaError } from "../../utils/err/handlePrismaerror";
 import { prisma } from "../../prisma/config/prismaConfig";
@@ -9,7 +10,7 @@ import { prisma } from "../../prisma/config/prismaConfig";
 type ModelName = keyof typeof Prisma.ModelName;
 
 const modelName: ModelName = "category";
-export const addCategory = add(modelName);
+export const addCategory = [addSlugAttribute("category_name"), add(modelName)];
 export const updateCategory = update(modelName);
 export const deleteCategory = remove(modelName);
 export const getCategory = asyncHandler(async (req, res, next) => {

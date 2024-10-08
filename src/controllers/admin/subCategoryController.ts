@@ -2,6 +2,7 @@ import { Prisma, PrismaClient, category } from "@prisma/client";
 import { add, getMany, getOne, remove, update } from "../../services/CRUD";
 
 import ApiError from "../../utils/err/ApiErrorHandler";
+import { addSlugAttribute } from "../../middlewares/slug";
 import asyncHandler from "express-async-handler";
 import { getCategory } from "./categoryController";
 import { handlePrismaError } from "../../utils/err/handlePrismaerror";
@@ -30,7 +31,10 @@ export const check_parent_id_existence = asyncHandler(
     next();
   }
 );
-export const addSubCategory = add(modelName);
+export const addSubCategory = [
+  addSlugAttribute("category_name"),
+  add(modelName),
+];
 export const updateSubCategory = update(modelName);
 export const deleteSubCategory = remove(modelName);
 export const getSubCategory = asyncHandler(async (req, res, next) => {
