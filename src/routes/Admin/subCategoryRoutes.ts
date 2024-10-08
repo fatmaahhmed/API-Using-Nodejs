@@ -17,7 +17,7 @@ import {
 // import { check } from "express-validator";
 //  import { SubSubCategory } from "./Admin.SubSubCategory";
 import express from "express";
-import { verifyTokenWithOptionalRole } from "../../middlewares/auth/verifyTokenWithOptionalRole";
+import { isAuthenticated } from "../../middlewares/auth/verifyTokenWithOptionalRole";
 
 const SubCategoryRoute = express.Router();
 // SubCategory.use("/:category_id/sub/", SubSubCategory);
@@ -27,7 +27,7 @@ SubCategoryRoute.get("/", getPaginatedCategories);
 SubCategoryRoute.get("/:category_id", getSubCategory);
 SubCategoryRoute.post(
   "/",
-  verifyTokenWithOptionalRole("Admin"),
+  isAuthenticated("Admin"),
   validateSubCategory,
 
   check_parent_id_existence,
@@ -35,14 +35,10 @@ SubCategoryRoute.post(
 );
 SubCategoryRoute.route("/:category_id")
   .delete(
-    verifyTokenWithOptionalRole("Admin"),
+    isAuthenticated("Admin"),
     validateDeleteSubCategory,
     deleteSubCategory
   )
-  .put(
-    validateUpdateSubCategory,
-    verifyTokenWithOptionalRole("Admin"),
-    updateSubCategory
-  );
+  .put(validateUpdateSubCategory, isAuthenticated("Admin"), updateSubCategory);
 
 export default SubCategoryRoute;

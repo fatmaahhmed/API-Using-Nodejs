@@ -8,7 +8,7 @@ import {
 
 //  import { SubBrand } from "./Admin.SubBrand";
 import express from "express";
-import { verifyTokenWithOptionalRole } from "../../middlewares/auth/verifyTokenWithOptionalRole";
+import { isAuthenticated } from "../../middlewares/auth/verifyTokenWithOptionalRole";
 
 // import {
 //   validateBrand,
@@ -24,19 +24,19 @@ brand.get("/", getPaginatedBrands);
 brand.post(
   "/",
   // validateBrand,
-  verifyTokenWithOptionalRole("Admin"),
+  isAuthenticated("Admin"),
   addBrand
 );
 brand
   .route("/:brand_id")
   .delete(
     // validateDeleteBrand,
-    verifyTokenWithOptionalRole("Admin"),
+    isAuthenticated("Admin"),
     deleteBrand
   )
   .put(
     // validateBrandUpdate,
-    verifyTokenWithOptionalRole("Admin"),
+    isAuthenticated("Admin"),
     updateBrand
   );
 

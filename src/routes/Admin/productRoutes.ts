@@ -10,15 +10,14 @@ import {
 } from "../../controllers/admin/productController";
 
 import express from "express";
-import { verifyTokenWithOptionalRole } from "../../middlewares/auth/verifyTokenWithOptionalRole";
+import { isAuthenticated } from "../../middlewares/auth/verifyTokenWithOptionalRole";
 
 const ProductRoute = express.Router();
 
 ProductRoute.get("/:product_id", getProduct);
-verifyTokenWithOptionalRole("Admin"),
-  ProductRoute.get("/", getPaginatedProducts);
+isAuthenticated("Admin"), ProductRoute.get("/", getPaginatedProducts);
 ProductRoute.route("/:product_id").delete(
-  verifyTokenWithOptionalRole("Admin"),
+  isAuthenticated("Admin"),
   // validateDeleteProduct,
   deleteProduct
 );

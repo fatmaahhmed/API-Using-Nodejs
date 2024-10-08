@@ -13,28 +13,15 @@ import {
 
 //  import { SubProduct } from "./User.SubProduct";
 import express from "express";
-import { verifyTokenWithOptionalRole } from "../../middlewares/auth/verifyTokenWithOptionalRole";
+import { isAuthenticated } from "../../middlewares/auth/verifyTokenWithOptionalRole";
 
 const Product = express.Router();
 // create a new product
-Product.post(
-  "/",
-  verifyTokenWithOptionalRole("User"),
-  validateproduct,
-  addProduct
-);
+Product.post("/", isAuthenticated("User"), validateproduct, addProduct);
 // update a product and delete a product
 Product.route("/:Product_id")
-  .delete(
-    verifyTokenWithOptionalRole("User"),
-    validateDeleteproduct,
-    deleteProduct
-  )
-  .put(
-    verifyTokenWithOptionalRole("User"),
-    validateproductUpdate,
-    updateProduct
-  );
+  .delete(isAuthenticated("User"), validateDeleteproduct, deleteProduct)
+  .put(isAuthenticated("User"), validateproductUpdate, updateProduct);
 // get all products
 Product.get("/", getPaginatedProducts);
 // get a single product
