@@ -1,50 +1,57 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
-
 datasource db {
   provider = "sqlite"
   url      = "file:./dev.db"
 }
 model copon {
-  copon_id      Int      @id @default(autoincrement())
-  copon_code    String   @unique
+  copon_id      Int       @id @default(autoincrement())
+  copon_code    String    @unique
   discount      Float
   start_date    DateTime
   end_date      DateTime 
-  is_active     Boolean    @default(true)
+  is_active     Boolean   @default(true)
   user_id       Int      
-  user          user     @relation(fields: [user_id], references: [user_id],  onDelete: Cascade,onUpdate: Cascade) // user can have only one copon 
-  cartItems     cartItem[] //copon can have many cartItems 
+  user          user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
+  cartItems     cartItem[]
+  @@index([user_id])
+  @@index([copon_code])
 }
+
 model cart {
-  cart_id    Int      @id @default(autoincrement())
-  user_id    Int @unique
-  user       user     @relation(fields: [user_id], references: [user_id], onDelete: Cascade,onUpdate: Cascade) // user can have only one cart
-  // cart can have many cartItems
+  cart_id    Int        @id @default(autoincrement())
+  user_id    Int        @unique
+  total      Float      @default(0)  // Added to store cart total
+  status     String     @default("active") // Added to track cart status
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @default(now())
+  user       user       @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
   cartItems  cartItem[]
 
+  @@index([user_id])
 }
-model cartItem{
-  cartItem_id Int @id @default(autoincrement())
+
+model cartItem {
+  cartItem_id Int      @id @default(autoincrement())
   cart_id     Int
   product_id  Int
-  quantity    Int
+  quantity    Int      @default(1)
   unit_price  Int 
-  subtotal   Float
+  subtotal    Float
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
   copon_id    Int?
-  copon       copon? @relation(fields: [copon_id], references: [copon_id], onDelete: Cascade,onUpdate: Cascade)
-  cart        cart     @relation(fields: [cart_id], references: [cart_id], onDelete: Cascade,onUpdate: Cascade)
-  product     product @relation(fields: [product_id], references: [product_id], onDelete: Cascade,onUpdate: Cascade)
+  copon       copon?   @relation(fields: [copon_id], references: [copon_id], onDelete: SetNull, onUpdate: Cascade)
+  cart        cart     @relation(fields: [cart_id], references: [cart_id], onDelete: Cascade, onUpdate: Cascade)
+  product     product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([cart_id, product_id]) // Prevent duplicate products in cart
+  @@index([cart_id])
+  @@index([product_id])
+  @@index([copon_id])
 }
+
 model user {
   user_id                   Int        @id @default(autoincrement())
   username                  String     @unique
@@ -56,15 +63,19 @@ model user {
   verificationCode          String     @default("")
   verification_code_expires DateTime   @default(now())
   verified                  Boolean    @default(false)
+  createdAt                 DateTime   @default(now()) // Added for user tracking
+  updatedAt                 DateTime   @default(now())      // Added for user tracking
   brands                    brand[]
   categories                category[]
   orders                    order[]
   products                  product[]
   reviews                   review[]
   wishList                  wishList[]
-  copons                    copon[] // user can have many copons
-  cart_id Int?              // user can have only one
-  cart                cart? // user can have only one cart                      
+  copons                    copon[]
+  cart                     cart?
+
+  @@index([email])
+  @@index([username])
 }
 
 model category {
@@ -73,37 +84,51 @@ model category {
   slug            String    @default("")
   user_id         Int
   parent_id       Int?
-  parentCategory  category?  @relation("ParentRelation", fields: [parent_id], references: [category_id], onDelete: Cascade,onUpdate: Cascade)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @default(now())
+  parentCategory  category?  @relation("ParentRelation", fields: [parent_id], references: [category_id], onDelete: SetNull, onUpdate: Cascade)
   childCategories category[] @relation("ParentRelation")
   Admin           user       @relation(fields: [user_id], references: [user_id], onDelete: Cascade,onUpdate: Cascade)
   products        product[]
+
+  @@index([slug])
+  @@index([parent_id])
+  @@index([user_id])
 }
 
 model product {
   product_id      Int        @id @default(autoincrement())
   product_name    String     @unique
   slug            String    @default("")
-  quantity        Int
+  quantity        Int        @default(0)
   description     String
   price           Float
   brand_id        Int
-  rating          Float
-  reviews_count   Int
-  is_best_seller  Boolean
-  is_on_sale      Boolean
-  sale_start_date DateTime
-  sale_end_date   DateTime
-  discount_price  Float
+  rating          Float      @default(0)
+  reviews_count   Int        @default(0)
+  is_best_seller  Boolean    @default(false)
+  is_on_sale      Boolean    @default(false)
+  sale_start_date DateTime?
+  sale_end_date   DateTime?
+  discount_price  Float?
   category_id     Int?
   user_id         Int
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @default(now())
   orders          order[]
-  brand           brand      @relation(fields: [brand_id], references: [brand_id],onDelete: Cascade,onUpdate: Cascade)
-  user            user       @relation(fields: [user_id], references: [user_id], onDelete: Cascade,onUpdate: Cascade)
-  category        category?  @relation(fields: [category_id], references: [category_id], onDelete: Cascade,onUpdate: Cascade)
+  brand           brand      @relation(fields: [brand_id], references: [brand_id], onDelete: Cascade, onUpdate: Cascade)
+  user            user       @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
+  category        category?  @relation(fields: [category_id], references: [category_id], onDelete: SetNull, onUpdate: Cascade)
   reviews         review[]
   WishList        wishList[]
-  // product can be in many cartitems
   cartItems       cartItem[]
+
+  @@index([slug])
+  @@index([brand_id])
+  @@index([category_id])
+  @@index([user_id])
+  @@index([is_best_seller])
+  @@index([is_on_sale])
 }
 
 model order {
@@ -113,17 +138,23 @@ model order {
   quantity        Int
   time_to_deliver DateTime
   total_price     Float
-  order_date      DateTime
-  product         product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade,onUpdate: Cascade)
-  user            user     @relation(fields: [user_id], references: [user_id], onDelete: Cascade,onUpdate: Cascade)
+  order_date      DateTime @default(now())
+  status          String   @default("pending") // Added to track order status
+  product         product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: Cascade)
+  user            user     @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([user_id])
+  @@index([product_id])
+  @@index([order_date])
 }
 
 model wishList {
-  wishlist_id Int     @id @default(autoincrement())
+  wishlist_id Int      @id @default(autoincrement())
   product_id  Int
   user_id     Int
-  user        user    @relation(fields: [user_id], references: [user_id], onDelete: Cascade,onUpdate: Cascade)
-  product     product @relation(fields: [product_id], references: [product_id], onDelete: Cascade,onUpdate: Cascade)
+  createdAt   DateTime @default(now())
+  user        user     @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
+  product     product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([wishlist_id, product_id, user_id])
   @@index([product_id])
@@ -135,10 +166,14 @@ model review {
   product_id Int
   user_id    Int
   rating     Float    @default(0)
-  created_at DateTime
-  updated_at DateTime
-  user       user     @relation(fields: [user_id], references: [user_id], onDelete: Cascade,onUpdate: Cascade)
-  product    product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade,onUpdate: Cascade)
+  content    String?  // Added for review text
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  user       user     @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
+  product    product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([product_id])
+  @@index([user_id])
 }
 
 model brand {
@@ -146,7 +181,11 @@ model brand {
   brand_name String    @default("")
   slug       String    @unique
   user_id    Int
-  user       user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade , onUpdate: Cascade)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) // Changed to have default
+  user       user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
   products   product[]
-}
 
+  @@index([slug])
+  @@index([user_id])
+}
