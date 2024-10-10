@@ -58,13 +58,13 @@ Tech Stack
 How to Run
 
 	1.	Clone the repository:
+ https://github.com/fatmaahhmed/API-Using-Nodejs.git
 
 
 
 
 	2.	Install dependencies:
-
-npm install
+ npm install
 
 
 	3.	Set up environment variables:
