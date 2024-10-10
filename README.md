@@ -59,8 +59,7 @@ How to Run
 
 	1.	Clone the repository:
 
-git clone https://github.com/your-username/e-commerce-api.git
-cd e-commerce-api
+
 
 
 	2.	Install dependencies:
@@ -70,7 +69,7 @@ npm install
 
 	3.	Set up environment variables:
 	•	Create a .env file in the root directory and define the following variables:
-	•	DB_URL: MongoDB connection string
+	•	DB_URL: 
 	•	JWT_SECRET: Secret key for JWT
 	•	STRIPE_SECRET: Stripe secret key for payment processing
 	•	PAYPAL_CLIENT_ID: PayPal client ID
