@@ -49,7 +49,7 @@ Tech Stack
 
 	•	Node.js
 	•	Express
-	•	Mongoose (MongoDB for database)
+	•	Sqllite,prisma ORM
 	•	JWT for authentication
 	•	Multer for image uploads
 	•	Stripe/PayPal for payment integration
