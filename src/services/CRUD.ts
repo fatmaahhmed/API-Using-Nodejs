@@ -28,7 +28,7 @@ const createCrudHandler = (
     async (req: ExtendedRequest, res: Response, next: NextFunction) => {
       const model = getPrismaModel(modelName);
       const idField = `${modelName.toString()}_id`;
-      const userId = "user_id";
+      const user_id = +req.params.user_id;
       let result: any;
 
       try {
@@ -42,7 +42,7 @@ const createCrudHandler = (
             // console.log(model);
 
             result = await model.create({
-              data: { ...req.body, [userId]: +req.params[userId] },
+              data: { ...req.body, user_id: user_id },
             });
             res.status(201).json({
               message: `${modelName.toString()} added successfully`,
@@ -51,14 +51,13 @@ const createCrudHandler = (
             });
             break;
           case "update":
-            const modelId = `${modelName.toString()}_id`;
+            const model_id = `${modelName.toString()}_id`;
             console.log("req.params[idField]", req.params[idField]);
-            console.log("req.params[userId]", req.params[userId]);
-            console.log("modelId", modelId);
+            console.log("model_id", model_id);
             const modelData = await model.findUnique({
               where: {
                 [idField]: +req.params[idField],
-                user_id: +req.params[userId],
+                user_id: user_id,
               },
             });
             if (!modelData) {
@@ -75,7 +74,7 @@ const createCrudHandler = (
               data: updateData,
               where: {
                 [idField]: +req.params[idField],
-                [userId]: +req.params[userId],
+                user_id: user_id,
               },
             });
             if (!result) {
@@ -88,11 +87,11 @@ const createCrudHandler = (
             break;
           case "remove":
             console.log("req.params[idField]", req.params[idField]);
-            console.log("req.params[userId]", req.params[userId]);
+            console.log("user_id: user_id", user_id);
             const DeletedData = await model.findUnique({
               where: {
                 [idField]: +req.params[idField],
-                user_id: +req.params[userId],
+                user_id: user_id,
               },
             });
 
@@ -103,7 +102,7 @@ const createCrudHandler = (
             result = await model.delete({
               where: {
                 [idField]: +req.params[idField],
-                user_id: +req.params[userId],
+                user_id: user_id,
               },
             });
 
