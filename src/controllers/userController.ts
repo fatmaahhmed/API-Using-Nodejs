@@ -1,7 +1,7 @@
 import { Prisma, PrismaClient, user } from "@prisma/client";
-import { add, getMany, getOne, remove, update } from "../../services/CRUD";
+import { add, getMany, getOne, remove, update } from "../services/CRUD";
 
-import { signUp } from "../auth/1-signup";
+import { signUp } from "./auth/1-signup";
 
 type ModelName = keyof typeof Prisma.ModelName;
 

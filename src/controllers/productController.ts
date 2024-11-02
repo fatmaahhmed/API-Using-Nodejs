@@ -1,11 +1,11 @@
 import { NextFunction, Response } from "express";
-import { add, getMany, getOne, update } from "../../services/CRUD";
+import { add, getMany, getOne, update } from "../services/CRUD";
 
-import { ExtendedRequest } from "../../utils/Types/request/request";
+import { ExtendedRequest } from "../utils/Types/request/request";
 import { Prisma } from "@prisma/client";
-import { addSlugAttribute } from "../../middlewares/slug";
+import { addSlugAttribute } from "../middlewares/slug";
 import asyncHandler from "express-async-handler";
-import { prisma } from "../../prisma/config/prismaConfig";
+import { prisma } from "../prisma/config/prismaConfig";
 
 type ModelName = keyof typeof Prisma.ModelName;
 const modelName: ModelName = "product";
@@ -36,5 +36,6 @@ export const deleteProduct = asyncHandler(
     });
   }
 );
+
 export const getProduct = getOne(modelName);
 export const getPaginatedProducts = getMany(modelName);
