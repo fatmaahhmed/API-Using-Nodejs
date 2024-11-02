@@ -1,8 +1,3 @@
-import // validateDeleteProduct,
-// validateProduct,
-// validateUpdateProduct,
-"../../utils/Validations/productValidation";
-
 import {
   addProduct,
   deleteProduct,
@@ -21,7 +16,7 @@ import { isAuthenticated } from "../../middlewares/auth/verifyTokenWithOptionalR
 
 const ProductRoute = express.Router();
 // USER ROUTES for product
-ProductRoute.post("/", isAuthenticated("User"), addProduct);
+ProductRoute.post("/", isAuthenticated("User"), validateproduct, addProduct);
 // update a product and delete a product
 ProductRoute.route("/:product_id")
   .delete(isAuthenticated(), validateDeleteproduct, deleteProduct)

@@ -5,12 +5,12 @@ import {
   getCopon,
   getPaginatedCopons,
   updateCopon,
-} from "../../controllers/App/coponController";
+} from "../../controllers/coponController";
 import {
   validateDeletecopon,
   validatecopon,
   validatecoponUpdate,
-} from "../../utils/Validations/Copon";
+} from "../../utils/Validations/coponValidation";
 
 import { ExtendedRequest } from "../../utils/Types/request/request";
 import { checkUserHasProducts } from "../../services/UserAndAdmin";
@@ -38,8 +38,8 @@ export const userProducts = async (
 };
 copon.post("/", isAuthenticated(), userProducts, validatecopon, addCopon);
 
-copon.get("/:copon_id", getCopon);
-copon.get("/", getPaginatedCopons);
+copon.get("/:copon_id", isAuthenticated(), getCopon);
+copon.get("/", isAuthenticated(), getPaginatedCopons);
 
 copon
   .route("/:copon_id")

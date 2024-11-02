@@ -5,21 +5,21 @@ import {
   getPaginatedCategories,
   getPaginatedCategoriesWithSubCategories,
   updateCategory,
-} from "../../controllers/admin/categoryController";
+} from "../../controllers/categoryController";
 import {
   validateCategory,
   validateCategoryUpdate,
   validateDeleteCategory,
-} from "../../utils/Validations/AdminValidation/Admin.Category";
+} from "../../utils/Validations/categoryValidation";
 
-import SubCategoryRoute from "./subCategoryRoutes";
+import SubCategoryRoute from "./subCategoryRoute";
 //  import { SubCategory } from "./Admin.SubCategory";
 import express from "express";
 import { isAuthenticated } from "../../middlewares/auth/verifyTokenWithOptionalRole";
 
 const Category = express.Router();
 // Category.use("/:category_id/subCategory/", getCategory);
-
+Category.use(isAuthenticated("Admin"));
 Category.get(
   "/:category_id/subCategory",
   getPaginatedCategoriesWithSubCategories

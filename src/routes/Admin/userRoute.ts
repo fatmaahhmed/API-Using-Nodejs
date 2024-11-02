@@ -4,7 +4,7 @@ import {
   getPaginatedUsers,
   getUser,
   updateUser,
-} from "../../controllers/admin/userController";
+} from "../../controllers/userController";
 
 //  import { SubUser } from "./Admin.SubUser";
 import express from "express";
@@ -12,10 +12,8 @@ import { isAuthenticated } from "../../middlewares/auth/verifyTokenWithOptionalR
 
 const user = express.Router();
 
-user.get("/", getPaginatedUsers);
-user.get("/:user_id/subUser");
-
-user.get("/:user_id", getUser);
+user.get("/", isAuthenticated(), getPaginatedUsers);
+user.get("/:user_id", isAuthenticated(), getUser);
 user.post(
   "/",
   //  validateUser,

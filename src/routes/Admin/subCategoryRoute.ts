@@ -1,4 +1,4 @@
-import {} from "../../controllers/admin/subCategoryController";
+import {} from "../../controllers/subCategoryController";
 
 import {
   addSubCategory,
@@ -7,12 +7,12 @@ import {
   getPaginatedCategories,
   getSubCategory,
   updateSubCategory,
-} from "../../controllers/admin/subCategoryController";
+} from "../../controllers/subCategoryController";
 import {
   validateDeleteSubCategory,
   validateSubCategory,
   validateUpdateSubCategory,
-} from "../../utils/Validations/AdminValidation/Admin.SubCategory";
+} from "../../utils/Validations/subCategoryValidation";
 
 // import { check } from "express-validator";
 //  import { SubSubCategory } from "./Admin.SubSubCategory";
@@ -22,9 +22,9 @@ import { isAuthenticated } from "../../middlewares/auth/verifyTokenWithOptionalR
 const SubCategoryRoute = express.Router();
 // SubCategory.use("/:category_id/sub/", SubSubCategory);
 
-SubCategoryRoute.get("/:category_id", getSubCategory);
-SubCategoryRoute.get("/", getPaginatedCategories);
-SubCategoryRoute.get("/:category_id", getSubCategory);
+SubCategoryRoute.get("/:category_id", isAuthenticated(), getSubCategory);
+SubCategoryRoute.get("/", isAuthenticated(), getPaginatedCategories);
+SubCategoryRoute.get("/:category_id", isAuthenticated(), getSubCategory);
 SubCategoryRoute.post(
   "/",
   isAuthenticated("Admin"),

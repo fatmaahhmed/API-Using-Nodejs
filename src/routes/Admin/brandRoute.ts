@@ -4,7 +4,7 @@ import {
   getBrand,
   getPaginatedBrands,
   updateBrand,
-} from "../../controllers/admin/brandController";
+} from "../../controllers/brandController";
 
 //  import { SubBrand } from "./Admin.SubBrand";
 import express from "express";
@@ -19,8 +19,8 @@ import { isAuthenticated } from "../../middlewares/auth/verifyTokenWithOptionalR
 const brand = express.Router();
 // Brand.use("/:Brand_id/subBrand/", getBrand);
 
-brand.get("/:brand_id", getBrand);
-brand.get("/", getPaginatedBrands);
+brand.get("/:brand_id", isAuthenticated(), getBrand);
+brand.get("/", isAuthenticated(), getPaginatedBrands);
 brand.post(
   "/",
   // validateBrand,
