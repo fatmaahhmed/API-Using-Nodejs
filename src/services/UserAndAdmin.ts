@@ -16,10 +16,10 @@ export const findUserByEmail = async (email: string) => {
     });
   return user;
 }; /**1727330293677 */
-export const updateUser = async (userId: number, data: any) => {
+export const updateUser = async (user_id: number, data: any) => {
   const user = await prisma.user
     .update({
-      where: { user_id: userId },
+      where: { user_id: user_id },
       data,
     })
     .catch((err) => {
@@ -28,10 +28,10 @@ export const updateUser = async (userId: number, data: any) => {
   return user;
 };
 // check if user has products or not
-export const checkUserHasProducts = async (userId: number) => {
+export const checkUserHasProducts = async (user_id: number) => {
   const user = await prisma.user
     .findUnique({
-      where: { user_id: userId },
+      where: { user_id: user_id },
       include: { products: true },
     })
 

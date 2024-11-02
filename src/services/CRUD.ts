@@ -7,6 +7,7 @@ import asyncHandler from "express-async-handler";
 import { handlePrismaError } from "../utils/err/handlePrismaerror";
 import { prisma } from "../prisma/config/prismaConfig";
 import { stringify } from "querystring";
+import { where } from "sequelize";
 
 type ModelName = keyof PrismaClient;
 interface CrudOperations {
@@ -121,19 +122,121 @@ const createCrudHandler = (
             res.status(200).json({ [modelName]: result });
             break;
           case "getMany":
+            // TODO: add pagination
             const page = parseInt(req.query.page as string) || 1;
             const pageSize = parseInt(req.query.pageSize as string) || 10;
             console.log(page, pageSize);
             if (page < 1 || pageSize < 1) {
               res.status(400).json({ error: "Invalid page or pageSize value" });
             }
+            // TODO:add filtration
+            const filterObject = { ...req.query } as any;
+            delete filterObject.page;
+            delete filterObject.pageSize;
+            console.log("filterObject", filterObject);
+            // make value of filterObject to be number
+            for (const key in filterObject) {
+              console.log("key", key);
+              if (filterObject.hasOwnProperty(key)) {
+                const value = filterObject[key];
+                if (typeof value === "string" && !isNaN(+value)) {
+                  filterObject[key] = +value;
+                  console.log("filterObject[key]", filterObject[key]);
+                }
+              }
+            }
+            console.log("filterObject", filterObject);
+            const filters: any = {};
+            if (filterObject.minRating) {
+              filters.rating = { gte: filterObject.minRating };
+            }
+            if (filterObject.maxRating) {
+              filters.rating = { lte: filterObject.maxRating };
+            }
+            if (filterObject.minPrice) {
+              filters.price = { gte: filterObject.minPrice };
+            }
+            if (filterObject.maxPrice) {
+              filters.price = { lte: filterObject.maxPrice };
+            }
+            if (filterObject.minRating) {
+              filters.rating = { gte: filterObject.minRating };
+            }
+            if (filterObject.maxRating) {
+              filters.rating = { lte: filterObject.maxRating };
+            }
+            // brand
+            if (filterObject.brand_name) {
+              filters.brand_name = filterObject.brand_name;
+            }
+            // category
+            if (filterObject.category) {
+              filters.category_id = filterObject.category;
+            }
+            // color
+            if (filterObject.color) {
+              filters.color = filterObject.color;
+            }
+            // stock
+            if (filterObject.in_stock) {
+              filters.in_stock = filterObject.in_stock
+                ? Boolean(1)
+                : Boolean(0);
+            }
+            console.log("filters", filters);
+            // TODO: add sorting
+
+            let sort = req.query.sort as any;
+            console.log("sort", req.query.sort);
+            let sortFields: any = {};
+            if (sort) {
+              sort = sort.split(",");
+              console.log("sort", sort);
+            }
+
+            if (sort && sort[0].startsWith("-")) {
+              // remove - from sort[0]
+              sort[0] = sort[0].substring(1);
+              console.log("sort -");
+              for (const s of sort) {
+                sortFields[s] = "desc";
+              }
+              // make this array of objects
+              sort = {
+                [sort[0]]: "desc",
+              };
+            } else {
+              console.log("sort +");
+              sort = {
+                [sort.substring(1)]: "des",
+              };
+            }
+            console.log("sort", sort);
+            // TODO: add fields
+            let fields = req.query.fields as any;
+
             const items = await model.findMany({
+              where: {
+                ...filters,
+              },
               skip: (page - 1) * pageSize,
               take: pageSize,
               orderBy: {
-                [idField]: "asc",
+                // [idField]: "asc",
+                ...sortFields,
               },
             });
+
+            // TODO: add sorting
+
+            // TODO: add search
+            // TODO: add select
+            // TODO: add include
+            // TODO: add aggregate
+            // TODO: add groupBy
+            // TODO: add having
+            //
+
             const totalItems = await model.count();
             const totalPages = Math.ceil(totalItems / pageSize);
             console.log(totalItems, totalPages);
@@ -150,6 +253,9 @@ const createCrudHandler = (
             break;
         }
       } catch (error) {
+        // log field which may cause error
+        console.log("error----------------------", error);
+
         next(handlePrismaError(error));
       }
     }
