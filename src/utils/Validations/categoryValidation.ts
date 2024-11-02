@@ -1,7 +1,7 @@
 import { body, param, validationResult } from "express-validator";
 
-import ApiError from "../../err/ApiErrorHandler";
-import { validationErrors } from "../../../middlewares/validation/validatorMiddleware";
+import ApiError from "../err/ApiErrorHandler";
+import { validationErrors } from "../../middlewares/validation/validatorMiddleware";
 
 export const validateCategory = [
   // Validate category_name

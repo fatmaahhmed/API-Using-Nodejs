@@ -77,9 +77,9 @@ export const validatecoponUpdate = [
   //   .withMessage("copon name must be a string"),
   param("copon_id")
     .notEmpty()
-    .withMessage("coponId is required")
+    .withMessage("copon_id is required")
     .isInt()
-    .withMessage("coponId must be an integer"),
+    .withMessage("copon_id must be an integer"),
   param("user_id")
     .notEmpty()
     .withMessage("user_id is required")

@@ -3,6 +3,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import ApiError from "./ApiErrorHandler";
 
 export const handlePrismaError = (error: any): ApiError => {
+  console.log("error", error);
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     switch (error.code) {
       case "P2002": // Unique constraint failed
