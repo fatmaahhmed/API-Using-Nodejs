@@ -105,6 +105,7 @@ model product {
   product_name    String     @unique
   slug            String    @default("")
   quantity        Int        @default(0)
+  in_stock        Boolean    @default(true)
   description     String
   price           Float
   color           String     @default("")
@@ -133,23 +134,6 @@ model product {
   @@index([user_id])
   @@index([is_best_seller])
   @@index([is_on_sale])
-}
-
-model order {
-  order_id        Int      @id @default(autoincrement())
-  user_id         Int
-  product_id      Int
-  quantity        Int
-  time_to_deliver DateTime
-  total_price     Float
-  order_date      DateTime @default(now())
-  status          String   @default("pending") // Added to track order status
-  product         product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: Cascade)
-  user            user     @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
-
-  @@index([user_id])
-  @@index([product_id])
-  @@index([order_date])
 }
 
 model wishList {
@@ -192,4 +176,23 @@ model brand {
 
   @@index([slug])
   @@index([user_id])
+}
+model order {
+  order_id        Int      @id @default(autoincrement())
+  user_id         Int
+  cart_id         Int
+  time_to_deliver DateTime
+  address         String
+
+  total_price     Float
+  order_date      DateTime @default(now())
+  status          String   @default("pending") // Added to track order status
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+  // cart            cart     @relation(fields: [cart_id], references: [cart_id], onDelete: Cascade, onUpdate: Cascade)
+  user            user     @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([user_id])
+
+  @@index([order_date])
 }
