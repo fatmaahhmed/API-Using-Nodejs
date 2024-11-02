@@ -8,6 +8,7 @@ export const validationErrors = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log("validationErrors here in validatorMiddleware file");
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400).json({ errors: errors.array() });

@@ -5,9 +5,13 @@ export const requestLoggerMiddleware: RequestHandler = (req, res, next) => {
 
   // Function to create a box around the log
   const logInBox = (message: string) => {
-    const border = "+---------------------------+";
-    const padding = "|                           |";
-    const content = message.split("\n").map((line) => `| ${line.padEnd(25)} |`);
+    const border =
+      "+-------------------------------------------------------------------------------------------------------------------+";
+    const padding =
+      "|                                                                                                                  |";
+    const content = message
+      .split("\n\n")
+      .map((line) => `| ${line.padEnd(35)} |`);
 
     console.log(border);
     console.log(padding);
@@ -34,8 +38,6 @@ export const requestLoggerMiddleware: RequestHandler = (req, res, next) => {
       Token Details:
       Token: ${token}
     `);
-
-    console.log("req.params--->", req.params.user_id); // You can wrap this in a box too if needed
   }
 
   console.log("Request received");
