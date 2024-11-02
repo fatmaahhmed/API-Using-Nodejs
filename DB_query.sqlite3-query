@@ -136,3 +136,23 @@ INSERT INTO user (user_id, username, name, email, password, token, role, verific
 (43, 'fatmaahme88d2222323200333', 'fatmaahmed288220220323233', 'fatmaahmed208822220323233@gmail.com', '$2b$10$ywWbq/ZQJNlZathkQdPjzu0qMuNuXDg1mBjRunrU80ZqIj6XpwVty', '', 'User', '', '2024-09-23 17:54:24', 0),
 (44, 'fatmaahmed2222222222222', 'fatma', 'fatma@gmail.com', '$2b$10$JSM8qPEfVfkBpJqv02CUTOr.vtQ.Fx89lh5qi9T8.m8TsW.Mv1Uom', '', 'User', '', '2024-09-23 17:54:24', 0),
 (46, 'fatmaaahmed2222222222222', 'fatmaa', 'fatmaa@gmail.com', '$2b$10$QbWeQoBku7J1oi/hPx1VT.6G2i9iqmo1W8etL2E3ZLBtyOLJ.VBFe', '', 'User', '', '2024-09-23 17:54:24', 0);
+-- model copon {
+--   copon_id      Int      @id @default(autoincrement())
+--   copon_code    String   @unique
+--   discount      Float
+--   start_date    DateTime
+--   end_date      DateTime
+--   user_id       Int      @unique
+--   user          user     @relation(fields: [user_id], references: [user_id],  onDelete: Cascade,onUpdate: Cascade) // user can have only one copon
+-- }
+-- insert data to copon model
+
+INSERT INTO copon (copon_id, copon_code, discount, start_date, end_date, user_id) VALUES
+(1, 'SUMMER2024', 15.0, '2025-06-01 00:00:00', '2025-10-08 23:59:59', 2),
+(2, 'WINTER2024', 20.0, '2025-12-01 00:00:00', '2025-02-28 23:59:59', 3),
+(3, 'SPRING2024', 10.0, '2024-03-01 00:00:00', '2024-11-30 23:59:59', 4),
+(4, 'FALL2024', 25.0, '2024-09-01 00:00:00', '2024-11-30 23:59:59', 5);
+copon_code='SUMMER2024'
+discount=15.0
+start_date='2025-06-01 00:00:00'
+end_date='2025-10-020 23:59:59'
