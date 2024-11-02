@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 
-import { applyMiddlewares } from "./middlewares/routes/server";
-import { applyRoutes } from "./routes/MainRoutes/server";
+import { applyMiddlewares } from "./middlewares/routes/mainRoutesMiddleware";
+import { applyRoutes } from "./routes/MainRoutes/serverRoute";
 import dotenv from "dotenv";
 import { prisma } from "./prisma/config/prismaConfig";
 import { testConnection } from "./prisma/testConnection";
