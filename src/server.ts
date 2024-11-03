@@ -2,10 +2,7 @@ import express, { Request, Response } from "express";
 
 import { applyMiddlewares } from "./middlewares/routes/mainRoutesMiddleware";
 import { applyRoutes } from "./routes/MainRoutes/serverRoute";
-import dotenv from "dotenv";
-import { prisma } from "./prisma/config/prismaConfig";
 import { testConnection } from "./prisma/testConnection";
-import { testDB } from "./prisma/testDB";
 
 const app = express();
 const PORT = process.env.PORT || 3000;

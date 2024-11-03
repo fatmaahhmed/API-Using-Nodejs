@@ -6,7 +6,6 @@ import brand from "../Admin/brandRoute";
 import { cartItem } from "../App/cartItemRoute";
 // import { cart } from "../App/cart";
 import copon from "../App/coponRoute";
-import { customMiddleware } from "../../middlewares/test";
 import express from "express";
 import { forgotpasswordRouter } from "../Auth/3-forgotPassword";
 import { globalError } from "../../middlewares/Err/GlobalErrorHandlerMiddleware";
@@ -53,7 +52,7 @@ const applyUserRoutes = (app: express.Application) => {
 
 export const applyRoutes = (app: express.Application) => {
   app.get("/", (req, res) => {
-    res.send("MAIN ROUTE : Welcome to the API");
+    res.send("MAIN ROUTE : Welcome to the API ✌️ hello from docker");
   });
   app.get("/test", isAuthenticated("User"), (req, res) => {
     res.send("Middleware with parameter executed!");

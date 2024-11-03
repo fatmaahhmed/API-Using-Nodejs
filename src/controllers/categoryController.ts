@@ -7,7 +7,7 @@ import asyncHandler from "express-async-handler";
 import { handlePrismaError } from "../utils/err/handlePrismaerror";
 import { prisma } from "../prisma/config/prismaConfig";
 
-type ModelName = keyof typeof Prisma.ModelName;
+type ModelName = keyof typeof prisma;
 
 const modelName: ModelName = "category";
 export const addCategory = [addSlugAttribute("category_name"), add(modelName)];
@@ -50,7 +50,7 @@ export const getCategory = asyncHandler(async (req, res, next) => {
       );
     }
     res.status(200).json({ categories });
-  } catch (err) {
+  } catch (err: any) {
     next(handlePrismaError(err));
   }
 });
@@ -76,7 +76,7 @@ export const getPaginatedCategories = asyncHandler(async (req, res, next) => {
         category_id: "asc",
       },
     })
-    .catch((err) => {
+    .catch((err: any) => {
       next(handlePrismaError(err));
     });
   // i need to count category where parent_id is null
@@ -126,7 +126,7 @@ export const getPaginatedCategoriesWithSubCategories = asyncHandler(
           category_id: "asc",
         },
       })
-      .catch((err) => {
+      .catch((err: any) => {
         next(handlePrismaError(err));
       });
     // i need to count category where parent_id is null

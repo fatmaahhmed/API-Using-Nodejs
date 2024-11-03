@@ -1,8 +1,8 @@
 import { NextFunction, Response } from "express";
-import { PrismaClient, product } from "@prisma/client";
 
 import ApiError from "../utils/err/ApiErrorHandler";
 import { ExtendedRequest } from "../utils/Types/request/request";
+import { PrismaClient } from "@prisma/client";
 import asyncHandler from "express-async-handler";
 import { handlePrismaError } from "../utils/err/handlePrismaerror";
 import { prisma } from "../prisma/config/prismaConfig";
