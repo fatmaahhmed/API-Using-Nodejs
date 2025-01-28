@@ -1,9 +1,0 @@
--- database: /Users/fatmaahmed/Desktop/API-Using-Nodejs/src/prisma/dev.db
-
-SELECT * FROM copon;
-
-INSERT INTO copon (copon_id, copon_code, discount, start_date, end_date, user_id) VALUES
-(1, 'SUMMER2024', 15.0, '2025-06-01 00:00:00', '2025-10-08 23:59:59', 2),
-(2, 'WINTER2024', 20.0, '2025-12-01 00:00:00', '2025-02-28 23:59:59', 3),
-(3, 'SPRING2024', 10.0, '2024-03-01 00:00:00', '2024-11-30 23:59:59', 4),
-(4, 'FALL2024', 25.0, '2024-09-01 00:00:00', '2024-11-30 23:59:59', 5);

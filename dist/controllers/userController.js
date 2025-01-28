@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getPaginatedUsers = exports.getUser = exports.deleteUser = exports.updateUser = exports.addUser = void 0;
+const CRUD_1 = require("../services/CRUD");
+const modelName = "user";
+exports.addUser = (0, CRUD_1.add)(modelName);
+exports.updateUser = (0, CRUD_1.update)(modelName);
+exports.deleteUser = (0, CRUD_1.remove)(modelName);
+exports.getUser = (0, CRUD_1.getOne)(modelName);
+exports.getPaginatedUsers = (0, CRUD_1.getMany)(modelName);
